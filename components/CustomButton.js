@@ -42,6 +42,9 @@ const styles = StyleSheet.create({
         marginTop: 40,
         color: "#fff",
         backgroundColor: "#4487D6"
+    },
+    buttonText: {
+        color: "#fff"
     }
 });
 
