@@ -34,12 +34,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     button: {
-        width: "80%",
+        // width: "80%",
         borderRadius: 10,
         height: 50,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 40,
+        // marginTop: 40,
         color: "#fff",
         backgroundColor: "#4487D6"
     },
