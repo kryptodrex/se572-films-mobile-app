@@ -1,10 +1,8 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Image, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet, Image, Text, TextInput, View, Button, Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 
-import { API_ENDPOINT } from 'react-native-dotenv'
+// import { API_ENDPOINT } from '@env';
 import CustomButton from '../components/CustomButton';
 import AppContext from "../components/AppContext";
 
@@ -24,7 +22,7 @@ const LoginPage = ({ navigation }) => {
     if (context.username.trim() != "" && password.trim() != "") {
       var pw = CryptoJS.SHA256(password.trim()).toString();
       try { // try to login and get data
-        fetch(API_ENDPOINT + "/login" + isNew, { // get the token for the user
+        fetch(context.apiEndpoint + "/login" + isNew, { // get the token for the user
           method: 'POST',
           body: JSON.stringify({
             username: context.username,
@@ -42,9 +40,6 @@ const LoginPage = ({ navigation }) => {
 
               // Alert.alert(data.token);
 
-              // loginForm.hidden = true;
-              // loggedInUser.innerHTML = user.value;
-
               if (data.status == 200) { // if the user is returning
                 Alert.alert("Welcome back " + context.username + "!");
               }
@@ -52,16 +47,9 @@ const LoginPage = ({ navigation }) => {
                 Alert.alert("Welcome to the site, " + context.username + "!");
               }
 
-              navigation.navigate('Home');
+              navigation.navigate('Film Library'); // navigate to the home page
 
-              // user.value = '';
-              // pass.value = '';
-
-              // getFilms();
-
-              // pageContent.hidden = false;
             } else { // if there is some error, like user is not found in DB
-              // console.log(data);
               Alert.alert(data.status + " error: " + data.message);
             }
           })
@@ -110,7 +98,7 @@ const LoginPage = ({ navigation }) => {
         />
       </View>
 
-      <CustomButton title="LOGIN" onPress={() => handleLogin(1)} />
+      <Button title="LOGIN" onPress={() => handleLogin(1)} />
 
       <View>
         <Text
@@ -181,16 +169,16 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
 
-  button: {
-    width: "80%",
-    borderRadius: 10,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    color: "#fff",
-    backgroundColor: "#4487D6"
-  }
+  // button: {
+  //   width: "80%",
+  //   borderRadius: 10,
+  //   height: 50,
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   marginTop: 40,
+  //   color: "#fff",
+  //   backgroundColor: "#4487D6"
+  // }
 });
 
 
