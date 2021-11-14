@@ -1,89 +1,143 @@
-import React, { useState, Component } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, Image, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CryptoJS from 'crypto-js';
+
+import { API_ENDPOINT } from 'react-native-dotenv'
 import CustomButton from '../components/CustomButton';
+import AppContext from "../components/AppContext";
 
-export default class LoginPage extends Component {
+const LoginPage = ({ navigation }) => {
 
-  constructor(props) {
+  const context = useContext(AppContext);
+  const [password, setPassword] = useState('');
 
-    super(props);
-    this.state = {
-      isLoggedIn: false
-    };
-
-    this.onInputChange = this.onInputChange.bind(this);
-    // const[username, setUsername] = useState();
-    // const[password, setPassword] = useState();
-  }
-
-  onInputChange(event) {
-    Alert.alert(event);
-    // this.setState({
-    //   [name]: event
-    // });
-  }
-
-  handleLogin = () => {
-    if (this.state.username === 'admin' && this.state.password === 'admin') {
-      this.setState({ isLoggedIn: true });
-      Alert.alert('Logged in!');
+  const handleLogin = (option) => {
+    var isNew;
+    if (option == 2) {
+        isNew = '?isNew=true';
     } else {
-      Alert.alert('Invalid Credentials');
+        isNew = '';
+    }
+
+    if (context.username.trim() != "" && password.trim() != "") {
+      var pw = CryptoJS.SHA256(password.trim()).toString();
+      try { // try to login and get data
+        fetch(API_ENDPOINT + "/login" + isNew, { // get the token for the user
+          method: 'POST',
+          body: JSON.stringify({
+            username: context.username,
+            password: pw
+          }),
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        }).then(resp => resp.json())
+          .then(data => {
+            if (data.status == 200 || data.status == 201) { // if the response is successful
+              
+              context.setToken(data.token);
+
+              // Alert.alert(data.token);
+
+              // loginForm.hidden = true;
+              // loggedInUser.innerHTML = user.value;
+
+              if (data.status == 200) { // if the user is returning
+                Alert.alert("Welcome back " + context.username + "!");
+              }
+              if (data.status == 201) { // if the user is new
+                Alert.alert("Welcome to the site, " + context.username + "!");
+              }
+
+              navigation.navigate('Home');
+
+              // user.value = '';
+              // pass.value = '';
+
+              // getFilms();
+
+              // pageContent.hidden = false;
+            } else { // if there is some error, like user is not found in DB
+              // console.log(data);
+              Alert.alert(data.status + " error: " + data.message);
+            }
+          })
+      } catch (e) {
+        // console.log(e);
+        // console.log("--------------");
+        Alert.alert("Error: " + e.message);
+      }
+    } else {
+      context.setUsername('');
+      setPassword('');
+      Alert.alert('Username and/or password field cannot be blank!');
     }
   }
 
-  render() {
-    return (
-      <View style={styles.container}>
+  return (
+    <View style={styles.container}>
 
-        <View style={styles.logoContainer}>
-          <Image style={styles.image} source={require('../assets/clapboard-icon.png')} />
-          <Text style={styles.title}>Film Library</Text>
-        </View>
-
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Username"
-            placeholderTextColor="#003f5c"
-            name="username"
-            type="text"
-            value={this.state.username}
-            // onChange={this.onInputChange}
-            onChangeText={this.onInputChange}
-          />
-        </View>
-
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            secureTextEntry={true}
-            placeholder="Password"
-            placeholderTextColor="#003f5c"
-            name="password"
-            type="text"
-            value={this.state.password}
-            // onChange={this.onInputChange}
-            onChangeText={this.onInputChange}
-          />
-        </View>
-
-        <CustomButton title="LOGIN" onPress={this.handleLogin}/>
-
-
+      <View style={styles.logoContainer}>
+        <Image style={styles.image} source={require('../assets/clapboard-icon.png')} />
+        <Text style={styles.title}>Film Library</Text>
       </View>
-    );
-  }
 
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Username"
+          placeholderTextColor="#003f5c"
+          name="username"
+          type="text"
+          value={context.username}
+          onChangeText={context.setUsername}
+        />
+      </View>
+
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          secureTextEntry={true}
+          placeholder="Password"
+          placeholderTextColor="#003f5c"
+          name="password"
+          type="text"
+          value={password}
+          onChangeText={password => setPassword(password)}
+        />
+      </View>
+
+      <CustomButton title="LOGIN" onPress={() => handleLogin(1)} />
+
+      <View>
+        <Text
+          style={styles.textView}
+          name="newUserText"
+          type="text"
+          onPress={() => handleLogin(2)}
+        >
+          Create new user instead?
+        </Text>
+      </View>
+
+
+    </View>
+  );
 }
+
+// }
 
 
 // Stylesheet
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    // flex: 1,
-    width: '80%',
+    // display: 'flex',
+    flex: 1,
+    padding: 20,
+    // width: '80%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -107,6 +161,11 @@ const styles = StyleSheet.create({
     height: 45,
     marginBottom: 20,
     alignItems: "center",
+  },
+  textView: {
+    marginTop: 10,
+    color: 'black',
+    fontWeight: 'bold'
   },
 
   TextInput: {
@@ -135,4 +194,4 @@ const styles = StyleSheet.create({
 });
 
 
-// export default Login;
+export default LoginPage;
