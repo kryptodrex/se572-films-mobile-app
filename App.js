@@ -17,11 +17,18 @@ export default function App() {
   const [jwtToken, setToken] = useState('');
   const [username, setUsername] = useState('');
 
+  const logoutUser = (navigation) => {
+    setToken('');
+    setUsername('');
+    navigation.navigate('Login', {pw: ''});
+  }
+
   const globalProps = {
     token: jwtToken,
     setToken,
     username: username,
     setUsername,
+    logoutUser,
     apiEndpoint: 'http://10.0.0.38:3001/api/v1',
     omdbEndpoint: 'https://www.omdbapi.com/?apikey=aa3381be&type=movie'
   };
@@ -36,7 +43,7 @@ export default function App() {
           <Stack.Screen name="Film Library" component={UserFilmsPage} />
           <Stack.Screen name="Film Details" component={FilmPage} />
           <Stack.Screen name="Add a Film" component={AddFilmPage} />
-          <Stack.Screen name="Update Film" component={UpdateFilmPage} />
+          <Stack.Screen name="Update your Film" component={UpdateFilmPage} />
         </Stack.Navigator>
       </NavigationContainer>
 
