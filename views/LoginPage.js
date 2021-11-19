@@ -6,10 +6,14 @@ import CryptoJS from 'crypto-js';
 import CustomButton from '../components/CustomButton';
 import AppContext from "../components/AppContext";
 
-const LoginPage = ({ navigation }) => {
+const LoginPage = ( props ) => {
 
   const context = useContext(AppContext);
+
   const [password, setPassword] = useState('');
+  // if (props.route.params.pw !== undefined) {
+  //   setPassword('');
+  // }
 
   const handleLogin = (option) => {
     var isNew;
@@ -47,7 +51,7 @@ const LoginPage = ({ navigation }) => {
                 Alert.alert("Welcome to the site, " + context.username + "!");
               }
 
-              navigation.navigate('Film Library'); // navigate to the home page
+              props.navigation.navigate('Film Library'); // navigate to the home page
 
             } else { // if there is some error, like user is not found in DB
               Alert.alert(data.status + " error: " + data.message);
