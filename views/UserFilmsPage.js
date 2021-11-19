@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, Image, Text, TextInput, View, TouchableOpacity, Alert, Button } from 'react-native';
-import CustomButton from '../components/CustomButton';
+import { StyleSheet, Image, Text, View, Button, ScrollView } from 'react-native';
 
 import AppContext from "../components/AppContext";
 import FilmCard from '../components/FilmCard';
@@ -17,7 +16,7 @@ const UserFilmsPage = (props) => {
 
     const getUserFilms = () => {
         try {
-            fetch(context.apiEndpoint + "/films", {
+            fetch(context.apiEndpoint + "/films?limit=100", {
                 method: "GET",
                 headers: {
                     'Accept': 'application/json',
@@ -27,7 +26,7 @@ const UserFilmsPage = (props) => {
             }).then(resp => resp.json())
                 .then(results => {
                     if (results.total > 0) { // if there are any films, continue
-                        console.log(results);
+                        // console.log(results);
                         setResults(results.data);
                     } else { // if no films, show error
                         setResults([]);
@@ -43,18 +42,23 @@ const UserFilmsPage = (props) => {
 
     return (
 
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
-            <Button title="Add Film" onPress={() => props.navigation.navigate('Add a Film')} />
+            <View style={styles.buttonHeader}>
+                <Button title="Add Film" onPress={() => props.navigation.navigate('Add a Film')} />
+                <Button title="Reload" onPress={() => getUserFilms()} />
+                <Button title="Logout" onPress={() => context.logoutUser(props.navigation)} />
+            </View>
 
+            <View style={styles.container}>
                 {
                     results.length > 0 ?
-                        results.map((item) => {
+                        results.reverse().map((item) => {
                             return (
-                                // <Text key={index}>{item.Title}</Text>
-                                <FilmCard key={item._id} film={item} onPress={
-                                    () => {
-                                        props.navigation.navigate('Film Details', { filmId: item._id });
+                                <FilmCard 
+                                    key={item._id} 
+                                    film={item} onPress={ () => {
+                                        props.navigation.navigate('Film Details', { id: item._id });  
                                     }
                                 }/>
                             );
@@ -62,8 +66,9 @@ const UserFilmsPage = (props) => {
                         :
                         <Text>Looks like you haven't added any films yet. Try adding some!</Text>
                 }
+            </View>
 
-        </View>
+        </ScrollView>
 
     );
 
@@ -80,6 +85,11 @@ const styles = StyleSheet.create({
     //   alignItems: 'center',
     //   justifyContent: 'center',
     },
+    buttonHeader: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    }
 
 });
 
