@@ -1,17 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, Image, Text, TextInput, View, Alert, Button } from 'react-native';
+import { StyleSheet, ScrollView, TextInput, Alert, Button, Text } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import AppContext from "../../components/AppContext";
 
-const AddFilmPage = ( {navigation} ) => {
+const AddFilmPage = ( props ) => {
 
     const context = useContext(AppContext);
 
     const [filmName, setFilmName] = useState('');
     const [rating, setRating] = useState('*****');
     const [releaseYear, setReleaseYear] = useState();
-    const [posterUrl, setPosterUrl] = useState();
+    // const [posterUrl, setPosterUrl] = useState();
+    const [notes, setNotes] = useState('');
 
     const addFilm = () => {
         if (filmName.trim() != '') {
@@ -20,7 +21,8 @@ const AddFilmPage = ( {navigation} ) => {
                 name: filmName,
                 rating: rating,
                 releaseYear: releaseYear,
-                posterUrl: posterUrl
+                // posterUrl: posterUrl,
+                notes: notes
             }
 
             try {
@@ -38,10 +40,11 @@ const AddFilmPage = ( {navigation} ) => {
                             setFilmName(''); // clear input
                             setRating('*****');
                             setReleaseYear();
-                            setPosterUrl();
+                            // setPosterUrl();
+                            setNotes('');
                             Alert.alert("Your film was added!" ); // show alert for the film added
                             
-                            navigation.navigate('Film Library'); // navigate back to the film library
+                            props.navigation.navigate('Film Library'); // navigate back to the film library
                         } else {
                             Alert.alert(resp.status + " error: " + resp.message);
                         }
@@ -63,17 +66,20 @@ const AddFilmPage = ( {navigation} ) => {
 
     return (
 
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
+            <Text>Enter the film title: *</Text>
             <TextInput 
                 style={styles.textInput}
-                placeholder="Film Title"
+                placeholder="Ex: Hocus Pocus"
                 name="filmName"
                 type="text"
                 value={filmName}
+                required="true"
                 onChangeText={(filmName) => setFilmName(filmName)}
             />
 
+            <Text>Rate it from 1 to 5 stars: *</Text>
             <Picker
                 selectedValue={rating}
                 style={{ height: 50, width: 150 }}
@@ -87,9 +93,10 @@ const AddFilmPage = ( {navigation} ) => {
                 <Picker.Item label="*" value="*" />
             </Picker>
 
+            <Text>Enter the year it released (if you want):</Text>
             <TextInput 
                 style={styles.textInput}
-                placeholder="Release Year"
+                placeholder="Ex: 1993"
                 name="releaseYear"
                 type="number"
                 min="1800"
@@ -98,19 +105,24 @@ const AddFilmPage = ( {navigation} ) => {
                 onChangeText={(releaseYear) => setReleaseYear(releaseYear)}
             />
 
-            {/* <TextInput 
+            <Text>Add some notes about the film:</Text>
+            <TextInput 
                 style={styles.textInput}
-                placeholder="URL to Poster"
-                name="posterUrl"
+                placeholder="Ex: It's a good movie!"
+                name="notes"
                 type="text"
-                value={posterUrl}
-                onChangeText={(posterUrl) => setPosterUrl(posterUrl)}
-            /> */}
+                multiline={true}
+                numberOfLines={10}
+                value={notes}
+                onChangeText={(notes) => setNotes(notes)}
+            />
+
+            <Text style={styles.warningText}>(* = Required)</Text>
 
             <Button title="Add to Library" onPress={addFilm} />
 
 
-        </View>
+        </ScrollView>
 
     );
 
@@ -129,7 +141,7 @@ const styles = StyleSheet.create({
     },
 
     textInput: {
-        height: 50,
+        // height: 50,
         flex: 1,
         padding: 10,
         borderWidth: 2,
@@ -139,6 +151,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: "center",
     },
+
+    warningText: {
+        color: "#C70808",
+        marginBottom: 20
+    }
 
 });
 
