@@ -9,6 +9,8 @@ import UserFilmsPage from './views/UserFilmsPage';
 import FilmPage from './views/filmPages/FilmPage';
 import AddFilmPage from './views/filmPages/AddFilmPage';
 import UpdateFilmPage from './views/filmPages/UpdateFilmPage';
+import SearchFilmsPage from './views/SearchFilmsPage';
+import AddFilmFromSearchPage from './views/filmPages/AddFilmFromSearchPage';
 
 export default function App() {
 
@@ -18,9 +20,7 @@ export default function App() {
   const [username, setUsername] = useState('');
 
   const logoutUser = (navigation) => {
-    setToken('');
-    setUsername('');
-    navigation.navigate('Login', {pw: ''});
+    navigation.navigate('Login');
   }
 
   const globalProps = {
@@ -41,8 +41,10 @@ export default function App() {
           <Stack.Screen name="Login" component={LoginPage} />
           {/* <Stack.Screen name="Film Search" component={HomePage} /> */}
           <Stack.Screen name="Film Library" component={UserFilmsPage} />
+          <Stack.Screen name="Search Films" component={SearchFilmsPage} />
           <Stack.Screen name="Film Details" component={FilmPage} />
           <Stack.Screen name="Add Film" component={AddFilmPage} />
+          <Stack.Screen name="Add Film from Search" component={AddFilmFromSearchPage} />
           <Stack.Screen name="Update Film Details" component={UpdateFilmPage} />
         </Stack.Navigator>
       </NavigationContainer>
