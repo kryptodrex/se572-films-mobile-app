@@ -12,6 +12,10 @@ const UserFilmsPage = (props) => {
 
     useEffect(() => {
         getUserFilms();
+        const willFocusSubscription = props.navigation.addListener('focus', () => {
+            getUserFilms();
+        });
+        return willFocusSubscription;
     }, [])
 
     const getUserFilms = () => {
@@ -45,9 +49,9 @@ const UserFilmsPage = (props) => {
         <ScrollView style={styles.container}>
 
             <View style={styles.buttonHeader}>
-                <Button title="Add Film" onPress={() => props.navigation.navigate('Add a Film')} />
-                <Button title="Reload" onPress={() => getUserFilms()} />
                 <Button title="Logout" onPress={() => context.logoutUser(props.navigation)} />
+                <Button title="Reload" onPress={() => getUserFilms()} />
+                <Button title="Add Film" onPress={() => props.navigation.navigate('Add Film')} />
             </View>
 
             <View style={styles.container}>
@@ -55,16 +59,16 @@ const UserFilmsPage = (props) => {
                     results.length > 0 ?
                         results.reverse().map((item) => {
                             return (
-                                <FilmCard 
-                                    key={item._id} 
-                                    film={item} onPress={ () => {
-                                        props.navigation.navigate('Film Details', { id: item._id });  
+                                <FilmCard
+                                    key={item._id}
+                                    film={item} onPress={() => {
+                                        props.navigation.navigate('Film Details', { id: item._id });
                                     }
-                                }/>
+                                    } />
                             );
                         })
                         :
-                        <Text>Looks like you haven't added any films yet. Try adding some!</Text>
+                        <Text style={styles.warningText}>Looks like you haven't added any films yet. Try adding some!</Text>
                 }
             </View>
 
@@ -77,20 +81,23 @@ const UserFilmsPage = (props) => {
 // Stylesheet
 const styles = StyleSheet.create({
     container: {
-      display: 'flex',
-    //   flex: 1,
-      padding: 20,
-      height: '100%',
-      backgroundColor: '#fff'
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
+        display: 'flex',
+        //   flex: 1,
+        padding: 20,
+        height: '100%',
+        backgroundColor: '#fff'
+        //   alignItems: 'center',
+        //   justifyContent: 'center',
     },
     buttonHeader: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    warningText: {
+        color: "#C70808",
+        marginBottom: 20
     }
-
 });
 
 export default UserFilmsPage;
