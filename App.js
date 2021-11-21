@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { Button } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import AppContext from './components/AppContext';
@@ -19,8 +20,16 @@ export default function App() {
   const [jwtToken, setToken] = useState('');
   const [username, setUsername] = useState('');
 
-  const logoutUser = (navigation) => {
-    navigation.navigate('Login');
+  const setLogoutButton = (nav) => {
+    nav.setOptions({
+      headerRight: () => (
+          <Button
+              onPress={() => nav.navigate('Login')}
+              title="Logout"
+              color="#C70808"
+          />
+      ),
+    });
   }
 
   const globalProps = {
@@ -28,9 +37,9 @@ export default function App() {
     setToken,
     username: username,
     setUsername,
-    logoutUser,
-    apiEndpoint: 'http://10.0.0.38:3001/api/v1',
-    omdbEndpoint: 'https://www.omdbapi.com/?apikey=aa3381be&type=movie'
+    setLogoutButton,
+    apiEndpoint: 'http://10.0.0.38:3001/api/v1', // Endpoint of the local service
+    omdbEndpoint: 'https://www.omdbapi.com/?apikey=aa3381be&type=movie' // Endpoint of the OMDb API
   };
 
   return (
@@ -39,7 +48,6 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginPage} />
-          {/* <Stack.Screen name="Film Search" component={HomePage} /> */}
           <Stack.Screen name="Film Library" component={UserFilmsPage} />
           <Stack.Screen name="Search Films" component={SearchFilmsPage} />
           <Stack.Screen name="Film Details" component={FilmPage} />
