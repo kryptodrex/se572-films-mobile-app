@@ -10,17 +10,17 @@ const AddFilmPage = ( props ) => {
 
     const [filmName, setFilmName] = useState('');
     const [rating, setRating] = useState('*****');
-    const [releaseYear, setReleaseYear] = useState();
+    const [releaseYear, setReleaseYear] = useState('');
     // const [posterUrl, setPosterUrl] = useState();
     const [notes, setNotes] = useState('');
 
     const addFilm = () => {
-        if (filmName.trim() != '') {
+        if (filmName.trim() != '' && releaseYear.trim() != '') {
 
             let filmData = { // create an object for the film's data elements
                 name: filmName,
                 rating: rating,
-                releaseYear: releaseYear,
+                releaseYear: parseInt(releaseYear),
                 // posterUrl: posterUrl,
                 notes: notes
             }
@@ -58,6 +58,9 @@ const AddFilmPage = ( props ) => {
             if (filmName.trim() == "") {
                 setFilmName(''); // clear the blank input
                 Alert.alert("Enter a film title first!"); // alert user if no film was entered
+            } else if (releaseYear.trim() == "") {
+                setReleaseYear(''); // clear the blank input
+                Alert.alert("Enter a release year first!"); // alert user if no release year was entered
             } else {
                 Alert.alert("Something is wrong with your input. Please check it out.");
             }
@@ -82,7 +85,7 @@ const AddFilmPage = ( props ) => {
             <Text>Rate it from 1 to 5 stars: *</Text>
             <Picker
                 selectedValue={rating}
-                style={{ height: 50, width: 150 }}
+                // style={{ height: 50, width: 150 }}
                 onValueChange={(itemValue, itemIndex) => setRating(itemValue)}
                 prompt="Select the rating to give the film"
             >
@@ -93,14 +96,13 @@ const AddFilmPage = ( props ) => {
                 <Picker.Item label="*" value="*" />
             </Picker>
 
-            <Text>Enter the year it released (if you want):</Text>
+            <Text>Enter the year it was released: *</Text>
             <TextInput 
                 style={styles.textInput}
                 placeholder="Ex: 1993"
                 name="releaseYear"
-                type="number"
-                min="1800"
-                max="9999"
+                type="text"
+                maxLength={4}
                 value={releaseYear}
                 onChangeText={(releaseYear) => setReleaseYear(releaseYear)}
             />
