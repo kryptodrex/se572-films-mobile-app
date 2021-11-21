@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, Image, Text, TextInput, View, Button, Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 
@@ -11,25 +11,31 @@ const LoginPage = ( props ) => {
   const context = useContext(AppContext);
 
   const [password, setPassword] = useState('');
-  // if (props.route.params.pw !== undefined) {
-  //   setPassword('');
-  // }
+
+  useEffect(() => { // clear inputs on page load
+    const willFocusSubscription = props.navigation.addListener('focus', () => {
+        context.setToken('');
+        context.setUsername('');
+        setPassword('');
+    });
+    return willFocusSubscription;
+  }, [])
 
   const handleLogin = (option) => {
     var isNew;
-    if (option == 2) {
+    if (option == 2) { // if option is 2, then user is creating a new account
         isNew = '?isNew=true';
     } else {
         isNew = '';
     }
 
-    if (context.username.trim() != "" && password.trim() != "") {
-      var pw = CryptoJS.SHA256(password.trim()).toString();
+    if (context.username.trim() != "" && password.trim() != "") { // if username and password are not empty
+      var pw = CryptoJS.SHA256(password.trim()).toString(); // encrypt password
       try { // try to login and get data
         fetch(context.apiEndpoint + "/login" + isNew, { // get the token for the user
           method: 'POST',
           body: JSON.stringify({
-            username: context.username,
+            username: context.username.trim(),
             password: pw
           }),
           headers: {
@@ -40,32 +46,27 @@ const LoginPage = ( props ) => {
           .then(data => {
             if (data.status == 200 || data.status == 201) { // if the response is successful
               
-              context.setToken(data.token);
-
-              // Alert.alert(data.token);
+              context.setToken(data.token); // set the token in the context
 
               if (data.status == 200) { // if the user is returning
                 Alert.alert("Welcome back " + context.username + "!");
-              }
-              if (data.status == 201) { // if the user is new
+              } else if (data.status == 201) { // if the user is new
                 Alert.alert("Welcome to the site, " + context.username + "!");
               }
 
-              props.navigation.navigate('Film Library'); // navigate to the home page
+              props.navigation.navigate('Film Library'); // navigate to user's film library
 
             } else { // if there is some error, like user is not found in DB
-              Alert.alert(data.status + " error: " + data.message);
+              Alert.alert(data.message);
             }
           })
       } catch (e) {
-        // console.log(e);
-        // console.log("--------------");
         Alert.alert("Error: " + e.message);
       }
     } else {
-      context.setUsername('');
-      setPassword('');
-      Alert.alert('Username and/or password field cannot be blank!');
+      if (context.username.trim() == '') context.setUsername('');
+      if (password.trim() == '') setPassword('');
+      Alert.alert('Username and password field cannot be blank!');
     }
   }
 
@@ -104,23 +105,18 @@ const LoginPage = ( props ) => {
 
       <Button title="LOGIN" onPress={() => handleLogin(1)} />
 
-      <View>
-        <Text
-          style={styles.textView}
-          name="newUserText"
-          type="text"
+      <View style={{marginTop: 20}}>
+        <Button
+          color="grey"
+          title="Create new user"
           onPress={() => handleLogin(2)}
-        >
-          Create new user instead?
-        </Text>
+        />
       </View>
 
 
     </View>
   );
 }
-
-// }
 
 
 // Stylesheet

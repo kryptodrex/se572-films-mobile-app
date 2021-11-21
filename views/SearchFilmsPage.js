@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, TextInput, Text, View, Button, ScrollView } from 'react-native';
+import React, { useState, useContext, useEffect, useLayoutEffect } from 'react';
+import { StyleSheet, TextInput, Text, View, Alert, ScrollView } from 'react-native';
 
 import AppContext from "../components/AppContext";
 import FilmCard from '../components/FilmCard';
@@ -13,11 +13,15 @@ const SearchFilmsPage = (props) => {
 
     const [searchWarning, setSearchWarning] = useState('');
 
-    const handleOnChange = (value) => {
+    useLayoutEffect(() => {
+        context.setLogoutButton(props.navigation);
+    }, [props.navigation]);
+
+    const handleOnChange = (value) => { // handle search input
         setSearch(value);
       };
     
-    useEffect(() => {
+    useEffect(() => { // set a timeout to wait until the user stops typing
         const timeoutId = setTimeout(() => {
             if (search.length >= 3) {
                 console.log(`Searching for: "${search}"`);
@@ -33,9 +37,9 @@ const SearchFilmsPage = (props) => {
         return () => clearTimeout(timeoutId);
     }, [search]);
 
-    const getFilms = () => {
+    const getFilms = () => { // get films from API
         try {
-            fetch(context.omdbEndpoint + "&s=" + search, {
+            fetch(context.omdbEndpoint + "&s=" + search, { // fetch films from the OMDB API
                 method: "GET",
                 headers: {
                     'Accept': 'application/json',
@@ -43,75 +47,74 @@ const SearchFilmsPage = (props) => {
                 }
             }).then(resp => resp.json())
                 .then(results => {
-                    // console.log(results);
                     if (results.Response == 'True' && results.totalResults > 0) { // if there are any films, continue
-                        // console.log(results);
                         var resultArray = results.Search.sort((a, b) => a.Year - b.Year);
                         setResults(resultArray);
                     } else { // if no films, show error
-                        setResults([]);
+                        setResults([]); // clear results
                         setSearchWarning('No films found for search.');
                     }
                 });
         } catch (e) {
-            console.log(e);
-            console.log("--------------");
-            alert("Error: " + e.message);
+            Alert.alert("Error: " + e.message);
         }
     }
 
     return (
 
-        <ScrollView style={styles.container}>
+        <View style={{flex: 1}}>
+            <ScrollView style={styles.container}>
 
-            <View style={styles.buttonHeader}>
-                <Button title="Logout" color="#C70808"
-                    onPress={() => context.logoutUser(props.navigation)}
+                <View style={styles.container}>
+                    {
+                        results.length > 0 ?
+                            results.reverse().map((item, index) => {
+                                return (
+                                    <View style={styles.filmItem} key={'view_' + index}>
+                                        <FilmCard
+                                            key={'film_' + index}
+                                            title={item.Title}
+                                            releaseYear={item.Year}
+                                            posterUrl={item.Poster == "N/A" ? null : item.Poster}
+                                            rating={''}
+                                            onPress={() => 
+                                                props.navigation.navigate('Add Film from Search', {
+                                                    filmName: item.Title,
+                                                    releaseYear: item.Year,
+                                                    posterUrl: item.Poster == "N/A" ? null : item.Poster
+                                                })
+                                            }
+                                        />
+                                        {/* <Button 
+                                            title="Add to Library" 
+                                            onPress={() => 
+                                                props.navigation.navigate('Add Film from Search', {
+                                                    filmName: item.Title,
+                                                    releaseYear: item.Year,
+                                                    posterUrl: item.Poster
+                                                })
+                                            }
+                                        /> */}
+                                    </View>
+                                );
+                            })
+                            :
+                            <Text style={styles.warningText}>{searchWarning}</Text>
+                    }
+                </View>
+
+            </ScrollView>
+            <View style={styles.footer}>
+                <TextInput
+                    style={styles.searchBar}
+                    placeholder="Search for a film..."
+                    value={search}
+                    onChangeText={(value) => 
+                        handleOnChange(value)
+                    }
                 />
             </View>
-
-            <TextInput
-                style={styles.searchBar}
-                placeholder="Search for a film..."
-                value={search}
-                onChangeText={(value) => 
-                    handleOnChange(value)
-                }
-                // onChange={handleOnChange} value={search}
-            />
-
-            <View style={styles.container}>
-                {
-                    results.length > 0 ?
-                        results.reverse().map((item, index) => {
-                            return (
-                                <View style={styles.filmItem} key={'view_' + index}>
-                                    <FilmCard
-                                        key={'film_' + index}
-                                        title={item.Title}
-                                        releaseYear={item.Year}
-                                        posterUrl={item.Poster}
-                                        rating={''}
-                                    />
-                                    <Button 
-                                        title="Add to Library" 
-                                        onPress={() => 
-                                            props.navigation.navigate('Add Film from Search', {
-                                                filmName: item.Title,
-                                                releaseYear: item.Year,
-                                                posterUrl: item.Poster
-                                            })
-                                        }
-                                    />
-                                </View>
-                            );
-                        })
-                        :
-                        <Text style={styles.warningText}>{searchWarning}</Text>
-                }
-            </View>
-
-        </ScrollView>
+        </View>
 
     );
 
@@ -133,6 +136,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
+    footer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 15,
+        backgroundColor: '#fff',
+    },
     searchBar: {
         // height: 50,
         flex: 1,
@@ -141,18 +151,19 @@ const styles = StyleSheet.create({
         borderColor: "#4487D6",
         borderRadius: 10,
         width: "100%",
-        marginBottom: 10,
-        marginTop: 20,
+        // marginBottom: 10,
         alignItems: "center",
     },
     warningText: {
         color: "#C70808",
-        marginBottom: 20
+        marginBottom: 20,
+        textAlign: "center",
+        fontWeight: "bold",
     },
     filmItem: {
         display: 'flex',
         flexDirection: 'column',
-        marginBottom: 40,
+        marginBottom: 20,
     }
 });
 

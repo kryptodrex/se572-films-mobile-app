@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, ScrollView, TextInput, Alert, Button, Text } from 'react-native';
+import React, { useState, useContext, useLayoutEffect } from 'react';
+import { StyleSheet, View, ScrollView, TextInput, Alert, Button, Text } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import AppContext from "../../components/AppContext";
@@ -8,11 +8,15 @@ const AddFilmPage = ( props ) => {
 
     const context = useContext(AppContext);
 
+    useLayoutEffect(() => {
+        context.setLogoutButton(props.navigation);
+    }, [props.navigation]);
+
     const [filmName, setFilmName] = useState('');
     const [rating, setRating] = useState('*****');
     const [releaseYear, setReleaseYear] = useState('');
-    // const [posterUrl, setPosterUrl] = useState();
-    const [notes, setNotes] = useState('');
+    const [posterUrl, setPosterUrl] = useState();
+    const [notes, setNotes] = useState();
 
     const addFilm = () => {
         if (filmName.trim() != '' && releaseYear.trim() != '') {
@@ -21,7 +25,7 @@ const AddFilmPage = ( props ) => {
                 name: filmName,
                 rating: rating,
                 releaseYear: parseInt(releaseYear),
-                // posterUrl: posterUrl,
+                posterUrl: posterUrl,
                 notes: notes
             }
 
@@ -39,20 +43,18 @@ const AddFilmPage = ( props ) => {
                         if (resp.status == 201) {
                             setFilmName(''); // clear input
                             setRating('*****');
-                            setReleaseYear();
-                            // setPosterUrl();
+                            setReleaseYear('');
+                            setPosterUrl('');
                             setNotes('');
                             Alert.alert("Your film was added!" ); // show alert for the film added
                             
                             props.navigation.navigate('Film Library'); // navigate back to the film library
                         } else {
-                            Alert.alert(resp.status + " error: " + resp.message);
+                            Alert.alert(resp.message);
                         }
                 });
             } catch (e) {
-                console.log(e);
-                console.log("--------------");
-                alert("Error: " + e.message);
+                Alert.alert("Error: " + e.message);
             }
         } else {
             if (filmName.trim() == "") {
@@ -107,6 +109,16 @@ const AddFilmPage = ( props ) => {
                 onChangeText={(releaseYear) => setReleaseYear(releaseYear)}
             />
 
+            <Text>Add a link to the poster:</Text>
+            <TextInput 
+                style={styles.textInput}
+                placeholder="Ex: www.google.com"
+                name="posterUrl"
+                type="text"
+                value={posterUrl}
+                onChangeText={(posterUrl) => setPosterUrl(posterUrl)}
+            />
+
             <Text>Add some notes about the film:</Text>
             <TextInput 
                 style={styles.textInput}
@@ -114,7 +126,7 @@ const AddFilmPage = ( props ) => {
                 name="notes"
                 type="text"
                 multiline={true}
-                numberOfLines={10}
+                numberOfLines={8}
                 value={notes}
                 onChangeText={(notes) => setNotes(notes)}
             />
@@ -123,6 +135,7 @@ const AddFilmPage = ( props ) => {
 
             <Button title="Add to Library" onPress={addFilm} />
 
+            <View style={styles.warningText}></View>
 
         </ScrollView>
 

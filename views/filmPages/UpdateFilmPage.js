@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useLayoutEffect } from 'react';
 import { StyleSheet, ScrollView, Text, TextInput, View, Alert, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
@@ -8,12 +8,16 @@ const UpdateFilmPage = (props) => {
 
   const context = useContext(AppContext);
 
+  useLayoutEffect(() => {
+    context.setLogoutButton(props.navigation);
+  }, [props.navigation]);
+
   const [filmId , setFilmId] = useState(props.route.params.filmId);
   const [filmName, setFilmName] = useState(props.route.params.filmName);
   const [rating, setRating] = useState(props.route.params.rating);
   const [releaseYear, setReleaseYear] = useState(props.route.params.releaseYear);
   const [notes, setNotes] = useState(props.route.params.notes);
-  // const [posterUrl, setPosterUrl] = useState(props.route.params.film.posterUrl);
+  const [posterUrl, setPosterUrl] = useState(props.route.params.posterUrl);
 
   const updateFilm = () => {
     if (filmName.trim()) {
@@ -22,7 +26,7 @@ const UpdateFilmPage = (props) => {
         name: filmName,
         rating: rating,
         releaseYear: parseInt(releaseYear),
-        // posterUrl: posterUrl,
+        posterUrl: posterUrl,
         notes: notes
       }
 
@@ -104,6 +108,16 @@ const UpdateFilmPage = (props) => {
         onChangeText={(releaseYear) => setReleaseYear(releaseYear)}
       />
 
+      <Text>Update link to the poster:</Text>
+      <TextInput 
+          style={styles.textInput}
+          placeholder="Ex: www.google.com"
+          name="posterUrl"
+          type="text"
+          value={posterUrl}
+          onChangeText={(posterUrl) => setPosterUrl(posterUrl)}
+      />
+
       <Text>Update your notes about the film:</Text>
       <TextInput
         style={styles.textInput}
@@ -111,14 +125,14 @@ const UpdateFilmPage = (props) => {
         name="notes"
         type="text"
         multiline={true}
-        numberOfLines={10}
+        numberOfLines={8}
         value={notes}
         onChangeText={(notes) => setNotes(notes)}
       />
 
       <Text style={styles.warningText}>(* = Required)</Text>
 
-      <Button title="Update Film" onPress={updateFilm} />
+      <Button title="Save" onPress={updateFilm} />
 
 
     </ScrollView>
