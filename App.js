@@ -42,8 +42,8 @@ export default function App() {
           {/* <Stack.Screen name="Film Search" component={HomePage} /> */}
           <Stack.Screen name="Film Library" component={UserFilmsPage} />
           <Stack.Screen name="Film Details" component={FilmPage} />
-          <Stack.Screen name="Add a Film" component={AddFilmPage} />
-          <Stack.Screen name="Update your Film" component={UpdateFilmPage} />
+          <Stack.Screen name="Add Film" component={AddFilmPage} />
+          <Stack.Screen name="Update Film Details" component={UpdateFilmPage} />
         </Stack.Navigator>
       </NavigationContainer>
 
