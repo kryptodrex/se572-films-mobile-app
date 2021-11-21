@@ -1,42 +1,45 @@
 import React, { useState, Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import Rating from './Rating';
+import FilmPoster from './FilmPoster';
 
 const FilmCard = (props) => {
-    // constructor(props) {
-    //     super(props);
-    // }
+    
+    const [title, setTitle] = useState(props.title);
+    const [releaseYear, setReleaseYear] = useState(props.releaseYear);
+    const [posterUrl, setPosterUrl] = useState(props.posterUrl);
+    const [rating, setRating] = useState(props.rating);
 
-    // const handlePress = () => {
-    //     console.log('FilmCard pressed');
-    //     // Need to check to prevent null exception. 
-    //     props.onPress?.(); // Same as this.props.onPress && this.props.onPress();
-    // }
-
-    // render() {
+    const returnRating = () => { // create the Rating component if the rating is not null
+        if (rating) {
+            return (
+                <Rating 
+                    style={styles.textItem} 
+                    number={rating.split('*').length - 1} 
+                />
+            )
+        }
+    }
 
     return (
         <View style={styles.container}>
 
             <TouchableOpacity style={styles.filmCard} onPress={props.onPress}>
-                {/* <Image source={{uri: props.film.Poster}} style={{width: 400, height: 400}} /> */}
-                <Text style={styles.textItem}>{props.film.name}</Text>
+                <FilmPoster style={styles.poster} url={posterUrl} />
+                <Text style={[styles.title]}>{title}</Text>
                 <Text style={styles.textItem}>{
-                        props.film.releaseYear ? 
-                            "(" + props.film.releaseYear + ")"
+                        releaseYear ? 
+                            "(" + releaseYear + ")"
                             : ""
                     }
                 </Text>
-                <Rating 
-                    style={styles.textItem} 
-                    number={props.film.rating.split('*').length - 1} 
-                />
+                {
+                    returnRating()
+                }
             </TouchableOpacity>
 
         </View>
     );
-
-    // }
 
 }
 
@@ -55,14 +58,23 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "#4487D6",
         borderRadius: 10,
-        width: "100%",
+        width: "90%",
         padding: 10,
         marginBottom: 20,
         alignItems: "center",
     },
+    title: {
+        fontSize: 16,
+        fontWeight: "bold",
+        marginTop: 10,
+        textAlign: "center",
+    },
     textItem: {
         marginBottom: 10
     },
+    poster: {
+        marginTop: 10,
+    }
 });
 
 
