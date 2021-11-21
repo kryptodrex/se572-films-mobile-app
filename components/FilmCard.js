@@ -27,7 +27,10 @@ const FilmCard = (props) => {
                             : ""
                     }
                 </Text>
-                <Rating style={styles.textItem} number={props.film.rating.split('*').length - 1} />
+                <Rating 
+                    style={styles.textItem} 
+                    number={props.film.rating.split('*').length - 1} 
+                />
             </TouchableOpacity>
 
         </View>
