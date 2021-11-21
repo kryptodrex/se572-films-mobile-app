@@ -5,7 +5,6 @@ const Rating = (props) => {
 
     return (
         <View style={[props.style, styles.container]}>
-            {/* { stars } */}
             {[...Array(props.number)].map(
                 (value, index) => (
                     <Image style={styles.icon} key={index} source={require('../assets/star.png')} />
