@@ -21,7 +21,7 @@ const UpdateFilmPage = (props) => {
       let filmData = { // create an object for the film's data elements
         name: filmName,
         rating: rating,
-        releaseYear: releaseYear,
+        releaseYear: parseInt(releaseYear),
         // posterUrl: posterUrl,
         notes: notes
       }
@@ -98,9 +98,8 @@ const UpdateFilmPage = (props) => {
         style={styles.textInput}
         placeholder="Ex: 1993"
         name="releaseYear"
-        type="number"
-        min="1800"
-        max="9999"
+        type="text"
+        maxLength={4}
         value={releaseYear}
         onChangeText={(releaseYear) => setReleaseYear(releaseYear)}
       />
