@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     filmCard: {
-        borderWidth: 2,
+        borderWidth: 4,
         borderColor: "#4487D6",
         borderRadius: 10,
         width: "90%",
