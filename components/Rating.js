@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Image } from 'react-native';
 
 const Rating = (props) => {
 
@@ -25,8 +25,6 @@ const styles = StyleSheet.create({
     icon: {
         width: 20,
         height: 20,
-        // marginBottom: 10,
-        // marginTop: 10,
         marginRight: 5
     },
 });

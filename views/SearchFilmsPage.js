@@ -85,16 +85,6 @@ const SearchFilmsPage = (props) => {
                                                 })
                                             }
                                         />
-                                        {/* <Button 
-                                            title="Add to Library" 
-                                            onPress={() => 
-                                                props.navigation.navigate('Add Film from Search', {
-                                                    filmName: item.Title,
-                                                    releaseYear: item.Year,
-                                                    posterUrl: item.Poster
-                                                })
-                                            }
-                                        /> */}
                                     </View>
                                 );
                             })
@@ -105,7 +95,6 @@ const SearchFilmsPage = (props) => {
 
             </ScrollView>
             <View style={styles.footer}>
-                {/* TODO: Make a button to click for searching instead of auto-searching */}
                 <TextInput
                     style={styles.searchBar}
                     placeholder="Search for a film..."

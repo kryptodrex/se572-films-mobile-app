@@ -2,8 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, Image, Text, TextInput, View, Button, Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 
-// import { API_ENDPOINT } from '@env';
-import CustomButton from '../components/CustomButton';
 import AppContext from "../components/AppContext";
 
 const LoginPage = ( props ) => {
