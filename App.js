@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import AppContext from './components/AppContext';
 import LoginPage from './views/LoginPage';
-// import HomePage from './views/HomePage';
 import UserFilmsPage from './views/UserFilmsPage';
 import FilmPage from './views/filmPages/FilmPage';
 import AddFilmPage from './views/filmPages/AddFilmPage';
