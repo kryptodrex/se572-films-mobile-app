@@ -87,7 +87,6 @@ const AddFilmPage = ( props ) => {
             <Text>Rate it from 1 to 5 stars: *</Text>
             <Picker
                 selectedValue={rating}
-                // style={{ height: 50, width: 150 }}
                 onValueChange={(itemValue, itemIndex) => setRating(itemValue)}
                 prompt="Select the rating to give the film"
             >
@@ -149,14 +148,10 @@ const styles = StyleSheet.create({
       display: 'flex',
       flex: 1,
       padding: 20,
-    //   height: '100%',
       backgroundColor: '#fff'
-    //   alignItems: 'center',
-    //   justifyContent: 'center',
     },
 
     textInput: {
-        // height: 50,
         flex: 1,
         padding: 10,
         borderWidth: 2,

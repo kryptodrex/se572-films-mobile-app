@@ -2,8 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, Image, Text, TextInput, View, Button, Alert } from 'react-native';
 import CryptoJS from 'crypto-js';
 
-// import { API_ENDPOINT } from '@env';
-import CustomButton from '../components/CustomButton';
 import AppContext from "../components/AppContext";
 
 const LoginPage = ( props ) => {
@@ -122,10 +120,8 @@ const LoginPage = ( props ) => {
 // Stylesheet
 const styles = StyleSheet.create({
   container: {
-    // display: 'flex',
     flex: 1,
     padding: 20,
-    // width: '80%',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -167,18 +163,7 @@ const styles = StyleSheet.create({
     width: 95,
     height: 100,
     marginBottom: 20
-  },
-
-  // button: {
-  //   width: "80%",
-  //   borderRadius: 10,
-  //   height: 50,
-  //   alignItems: "center",
-  //   justifyContent: "center",
-  //   marginTop: 40,
-  //   color: "#fff",
-  //   backgroundColor: "#4487D6"
-  // }
+  }
 });
 
 

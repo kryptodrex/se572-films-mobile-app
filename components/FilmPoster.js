@@ -1,5 +1,5 @@
-import React, { useState, Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Image } from 'react-native';
 
 const FilmPoster = (props) => {
     
@@ -18,8 +18,6 @@ const FilmPoster = (props) => {
             }
         </View>
     );
-
-    // }
 
 }
 

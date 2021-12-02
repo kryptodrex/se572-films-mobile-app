@@ -85,16 +85,6 @@ const SearchFilmsPage = (props) => {
                                                 })
                                             }
                                         />
-                                        {/* <Button 
-                                            title="Add to Library" 
-                                            onPress={() => 
-                                                props.navigation.navigate('Add Film from Search', {
-                                                    filmName: item.Title,
-                                                    releaseYear: item.Year,
-                                                    posterUrl: item.Poster
-                                                })
-                                            }
-                                        /> */}
                                     </View>
                                 );
                             })
@@ -124,12 +114,9 @@ const SearchFilmsPage = (props) => {
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
-        //   flex: 1,
         padding: 20,
         height: '100%',
         backgroundColor: '#fff'
-        //   alignItems: 'center',
-        //   justifyContent: 'center',
     },
     buttonHeader: {
         display: 'flex',
@@ -144,14 +131,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     searchBar: {
-        // height: 50,
         flex: 1,
         padding: 10,
         borderWidth: 2,
         borderColor: "#4487D6",
         borderRadius: 10,
         width: "100%",
-        // marginBottom: 10,
         alignItems: "center",
     },
     warningText: {

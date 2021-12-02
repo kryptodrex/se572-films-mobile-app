@@ -1,5 +1,5 @@
-import React, { useState, Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Rating from './Rating';
 import FilmPoster from './FilmPoster';
 
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     filmCard: {
-        borderWidth: 2,
+        borderWidth: 4,
         borderColor: "#4487D6",
         borderRadius: 10,
         width: "90%",
