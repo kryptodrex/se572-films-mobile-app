@@ -42,10 +42,6 @@ const UpdateFilmPage = (props) => {
         }).then(resp => resp.json())
           .then(resp => {
             if (resp.status == 200) {
-              // setFilmName(''); // clear input
-              // setRating('*****');
-              // setReleaseYear();
-              // setPosterUrl();
               Alert.alert("Your film was updated!"); // show alert for the film added
 
               props.navigation.navigate('Film Library'); // navigate back to the film library
@@ -147,14 +143,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flex: 1,
     padding: 20,
-  //   height: '100%',
     backgroundColor: '#fff'
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
   },
 
   textInput: {
-      // height: 50,
       flex: 1,
       padding: 10,
       borderWidth: 2,

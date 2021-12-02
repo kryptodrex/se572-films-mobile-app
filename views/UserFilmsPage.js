@@ -84,8 +84,8 @@ const UserFilmsPage = (props) => {
                                         rating={item.rating}
 
                                         onPress={() => {
-                                            props.navigation.navigate('Film Details', { id: item._id });
-                                        }
+                                                props.navigation.navigate('Film Details', { id: item._id });
+                                            }
                                         }
                                     />
                                 );
