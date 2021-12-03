@@ -37,7 +37,8 @@ export default function App() {
     username: username,
     setUsername,
     setLogoutButton,
-    apiEndpoint: 'http://10.0.0.38:3001/api/v1', // Endpoint of the local service
+    // apiEndpoint: 'http://10.0.0.38:3001/api/v1', // Endpoint of the local service
+    apiEndpoint: 'http://10.0.0.38:8080/api/v1', // Endpoint of the Docker service
     omdbEndpoint: 'https://www.omdbapi.com/?apikey=aa3381be&type=movie' // Endpoint of the OMDb API
   };
 
