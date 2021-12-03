@@ -39,6 +39,7 @@ export default function App() {
     setLogoutButton,
     // apiEndpoint: 'http://localhost:3001/api/v1', // Endpoint of the local service
     apiEndpoint: 'http://localhost:8080/api/v1', // Endpoint of the Docker service
+    // apiEndpoint: 'http://YOUR_LAN_IP_ADDRESS:8080/api/v1', // Endpoint of the LAN Docker service
     omdbEndpoint: 'https://www.omdbapi.com/?apikey=aa3381be&type=movie' // Endpoint of the OMDb API
   };
 
